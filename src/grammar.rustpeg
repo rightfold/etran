@@ -1,0 +1,41 @@
+use ast::{Expression, Step};
+use value::{Level, Value};
+
+#[pub]
+step -> Step
+    = raise_step
+    / where_step
+
+raise_step -> Step
+    = raise_keyword level:level message:expression { Step::Raise(level, message) }
+
+where_step -> Step
+    = where_keyword condition:expression { Step::Where(condition) }
+
+expression -> Expression
+    = level_literal_expression
+
+level_literal_expression -> Expression
+    = value:level { Expression::Literal(Value::Level(value)) }
+
+alert_keyword    -> () = s [Aa][Ll][Ee][Rr][Tt] s
+critical_keyword -> () = s [Cc][Rr][Ii][Tt][Ii][Cc][Aa][Ll] s
+debug_keyword    -> () = s [Dd][Ee][Bb][Uu][Gg] s
+error_keyword    -> () = s [Ee][Rr][Rr][Oo][Rr] s
+info_keyword     -> () = s [Ii][Nn][Ff][Oo] s
+notice_keyword   -> () = s [Nn][Oo][Tt][Ii][Cc][Ee] s
+raise_keyword    -> () = s [Rr][Aa][Ii][Ss][Ee] s
+warning_keyword  -> () = s [Ww][Aa][Rr][Nn][Ii][Nn][Gg] s
+where_keyword    -> () = s [Ww][Hh][Ee][Rr][Ee] s
+
+level -> Level
+    = debug_keyword    { Level::Debug }
+    / info_keyword     { Level::Info }
+    / notice_keyword   { Level::Notice }
+    / warning_keyword  { Level::Warning }
+    / error_keyword    { Level::Error }
+    / critical_keyword { Level::Critical }
+    / alert_keyword    { Level::Alert }
+
+s -> ()
+    = [ \t\r\n]*
