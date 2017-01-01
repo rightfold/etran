@@ -1,5 +1,12 @@
-use ast::{Expression, Step};
+use ast::{Definition, Expression, From, Step};
 use value::{Level, Value};
+
+#[pub]
+definition -> Definition<'input>
+    = filter_keyword name:identifier as_keyword from:from steps:step* semicolon { Definition::Filter(name, from, steps) }
+
+from -> From<'input>
+    = from_keyword stream:identifier as_keyword name:identifier { From{stream: stream, name: name} }
 
 #[pub]
 step -> Step
@@ -18,16 +25,6 @@ expression -> Expression
 level_literal_expression -> Expression
     = value:level { Expression::Literal(Value::Level(value)) }
 
-alert_keyword    -> () = s [Aa][Ll][Ee][Rr][Tt] s
-critical_keyword -> () = s [Cc][Rr][Ii][Tt][Ii][Cc][Aa][Ll] s
-debug_keyword    -> () = s [Dd][Ee][Bb][Uu][Gg] s
-error_keyword    -> () = s [Ee][Rr][Rr][Oo][Rr] s
-info_keyword     -> () = s [Ii][Nn][Ff][Oo] s
-notice_keyword   -> () = s [Nn][Oo][Tt][Ii][Cc][Ee] s
-raise_keyword    -> () = s [Rr][Aa][Ii][Ss][Ee] s
-warning_keyword  -> () = s [Ww][Aa][Rr][Nn][Ii][Nn][Gg] s
-where_keyword    -> () = s [Ww][Hh][Ee][Rr][Ee] s
-
 level -> Level
     = debug_keyword    { Level::Debug }
     / info_keyword     { Level::Info }
@@ -36,6 +33,38 @@ level -> Level
     / error_keyword    { Level::Error }
     / critical_keyword { Level::Critical }
     / alert_keyword    { Level::Alert }
+
+identifier -> &'input str
+    = !keyword s name:$([a-z_][a-z0-9_]*) s { name }
+
+keyword -> ()
+    = alert_keyword
+    / as_keyword
+    / critical_keyword
+    / debug_keyword
+    / error_keyword
+    / filter_keyword
+    / from_keyword
+    / info_keyword
+    / notice_keyword
+    / raise_keyword
+    / warning_keyword
+    / where_keyword
+
+semicolon -> () = s ";" s
+
+alert_keyword    -> () = s [Aa][Ll][Ee][Rr][Tt] s
+as_keyword       -> () = s [Aa][Ss] s
+critical_keyword -> () = s [Cc][Rr][Ii][Tt][Ii][Cc][Aa][Ll] s
+debug_keyword    -> () = s [Dd][Ee][Bb][Uu][Gg] s
+error_keyword    -> () = s [Ee][Rr][Rr][Oo][Rr] s
+filter_keyword   -> () = s [Ff][Ii][Ll][Tt][Ee][Rr] s
+from_keyword     -> () = s [Ff][Rr][Oo][Mm] s
+info_keyword     -> () = s [Ii][Nn][Ff][Oo] s
+notice_keyword   -> () = s [Nn][Oo][Tt][Ii][Cc][Ee] s
+raise_keyword    -> () = s [Rr][Aa][Ii][Ss][Ee] s
+warning_keyword  -> () = s [Ww][Aa][Rr][Nn][Ii][Nn][Gg] s
+where_keyword    -> () = s [Ww][Hh][Ee][Rr][Ee] s
 
 s -> ()
     = [ \t\r\n]*
