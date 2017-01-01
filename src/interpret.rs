@@ -41,6 +41,8 @@ mod tests {
         let mut level = None;
         let mut message = None;
         interpret(&[
+            Instruction::Literal(Value::Boolean(false)),
+            Instruction::ConditionalJump(4),
             Instruction::Literal(Value::Boolean(true)),
             Instruction::Raise(Level::Info),
             Instruction::Halt,
