@@ -32,6 +32,10 @@ mod tests {
             step("PERFORM WARNING"),
             Ok(Step::Perform(Expression::Literal(Value::Level(Level::Warning))))
         );
+        assert_eq!(
+            step("PERFORM WARNING AS x"),
+            Ok(Step::PerformAs(Expression::Literal(Value::Level(Level::Warning)), "x"))
+        );
     }
 
     #[test]

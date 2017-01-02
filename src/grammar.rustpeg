@@ -13,18 +13,19 @@ from -> From<'input>
     = from_keyword stream:identifier as_keyword name:identifier { From{stream: stream, name: name} }
 
 #[pub]
-step -> Step
+step -> Step<'input>
     = perform_step
     / raise_step
     / where_step
 
-perform_step -> Step
-    = perform_keyword expression:expression { Step::Perform(expression) }
+perform_step -> Step<'input>
+    = perform_keyword expression:expression as_keyword name:identifier { Step::PerformAs(expression, name) }
+    / perform_keyword expression:expression { Step::Perform(expression) }
 
-raise_step -> Step
+raise_step -> Step<'input>
     = raise_keyword level:level message:expression { Step::Raise(level, message) }
 
-where_step -> Step
+where_step -> Step<'input>
     = where_keyword condition:expression { Step::Where(condition) }
 
 expression -> Expression

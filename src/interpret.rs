@@ -1,10 +1,15 @@
 use bytecode::{Chunk, Instruction};
+use std::iter::repeat;
 use value::{Level, Value};
 
 pub fn interpret<Raise>(chunk: &Chunk, mut raise: Raise)
     where Raise: FnMut(Level, &Value) {
     let mut program_counter = 0;
     let mut operand_stack = Vec::with_capacity(chunk.operand_stack_capacity);
+    let mut local_variables =
+        repeat(Value::Boolean(false))
+        .take(chunk.local_variable_count)
+        .collect::<Vec<Value>>();
     loop {
         match chunk.instructions[program_counter] {
             Instruction::Halt => return,
@@ -18,6 +23,12 @@ pub fn interpret<Raise>(chunk: &Chunk, mut raise: Raise)
 
             Instruction::Pop => {
                 operand_stack.pop();
+                program_counter += 1;
+            },
+
+            Instruction::Store(slot) => {
+                let value = operand_stack.pop().unwrap();
+                local_variables[slot] = value;
                 program_counter += 1;
             },
 
@@ -55,6 +66,7 @@ mod tests {
                     Instruction::Halt,
                 ],
                 operand_stack_capacity: 1,
+                local_variable_count: 0,
             },
             |l, m| { level = Some(l); message = Some(m.clone()); }
         );

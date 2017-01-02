@@ -3,7 +3,7 @@ use value::{Level, Value};
 #[derive(Debug, Eq, PartialEq)]
 pub enum Definition<'str> {
     Channel(&'str str, Type, &'str str),
-    Filter(&'str str, From<'str>, Vec<Step>),
+    Filter(&'str str, From<'str>, Vec<Step<'str>>),
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -18,8 +18,9 @@ pub struct From<'str> {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum Step {
+pub enum Step<'str> {
     Perform(Expression),
+    PerformAs(Expression, &'str str),
     Raise(Level, Expression),
     Where(Expression),
 }
