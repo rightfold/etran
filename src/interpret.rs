@@ -2,14 +2,18 @@ use bytecode::{Chunk, Instruction};
 use std::iter::repeat;
 use value::{Level, Value};
 
-pub fn interpret<Raise>(chunk: &Chunk, mut raise: Raise)
+pub fn interpret<Raise>(arguments: &[Value], chunk: &Chunk, mut raise: Raise)
     where Raise: FnMut(Level, &Value) {
     let mut program_counter = 0;
+
     let mut operand_stack = Vec::with_capacity(chunk.operand_stack_capacity);
+
     let mut local_variables =
         repeat(Value::Boolean(false))
         .take(chunk.local_variable_count)
         .collect::<Vec<Value>>();
+    local_variables[0..arguments.len()].clone_from_slice(arguments);
+
     loop {
         match chunk.instructions[program_counter] {
             Instruction::Halt => return,
@@ -62,6 +66,7 @@ mod tests {
         let mut level = None;
         let mut message = None;
         interpret(
+            &[],
             &Chunk{
                 instructions: vec![
                     Instruction::Literal(Value::Boolean(false)),
