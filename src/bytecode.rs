@@ -14,6 +14,7 @@ pub enum Instruction {
 
     Pop,
 
+    Load(usize),
     Store(usize),
 
     Raise(Level),

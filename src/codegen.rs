@@ -57,6 +57,11 @@ impl<'str> Codegen<'str> {
 
     pub fn codegen_expression(&mut self, expression: &Expression) {
         match *expression {
+            Expression::Variable(name) => {
+                let slot = *self.local_variable_slots.get(name).unwrap();
+                self.chunk.instructions.push(Instruction::Load(slot));
+                self.update_current_operand_stack_capacity(1);
+            },
             Expression::Literal(ref value) => {
                 self.chunk.instructions.push(Instruction::Literal(value.clone()));
                 self.update_current_operand_stack_capacity(1);
@@ -93,7 +98,8 @@ mod tests {
         codegen.codegen_step(&Step::Where(Expression::Literal(Value::Boolean(false))));
         codegen.codegen_step(&Step::Perform(Expression::Literal(Value::Boolean(true))));
         codegen.codegen_step(&Step::PerformAs(Expression::Literal(Value::Boolean(false)), "x"));
-        codegen.codegen_step(&Step::PerformAs(Expression::Literal(Value::Boolean(false)), "x"));
+        codegen.codegen_step(&Step::PerformAs(Expression::Variable("x"), "x"));
+        codegen.codegen_step(&Step::PerformAs(Expression::Variable("x"), "y"));
         assert_eq!(
             codegen.chunk,
             Chunk{
@@ -105,11 +111,13 @@ mod tests {
                     Instruction::Pop,
                     Instruction::Literal(Value::Boolean(false)),
                     Instruction::Store(0),
-                    Instruction::Literal(Value::Boolean(false)),
+                    Instruction::Load(0),
                     Instruction::Store(1),
+                    Instruction::Load(1),
+                    Instruction::Store(2),
                 ],
                 operand_stack_capacity: 1,
-                local_variable_count: 2,
+                local_variable_count: 3,
             }
         );
     }

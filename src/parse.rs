@@ -29,8 +29,8 @@ mod tests {
     #[test]
     fn test_perform_step() {
         assert_eq!(
-            step("PERFORM WARNING"),
-            Ok(Step::Perform(Expression::Literal(Value::Level(Level::Warning))))
+            step("PERFORM x"),
+            Ok(Step::Perform(Expression::Variable("x")))
         );
         assert_eq!(
             step("PERFORM WARNING AS x"),

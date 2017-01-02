@@ -19,13 +19,14 @@ pub struct From<'str> {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Step<'str> {
-    Perform(Expression),
-    PerformAs(Expression, &'str str),
-    Raise(Level, Expression),
-    Where(Expression),
+    Perform(Expression<'str>),
+    PerformAs(Expression<'str>, &'str str),
+    Raise(Level, Expression<'str>),
+    Where(Expression<'str>),
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum Expression {
+pub enum Expression<'str> {
+    Variable(&'str str),
     Literal(Value),
 }

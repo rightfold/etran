@@ -26,6 +26,11 @@ pub fn interpret<Raise>(chunk: &Chunk, mut raise: Raise)
                 program_counter += 1;
             },
 
+            Instruction::Load(slot) => {
+                let value = local_variables[slot].clone();
+                operand_stack.push(value);
+                program_counter += 1;
+            },
             Instruction::Store(slot) => {
                 let value = operand_stack.pop().unwrap();
                 local_variables[slot] = value;

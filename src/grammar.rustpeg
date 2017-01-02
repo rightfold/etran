@@ -28,10 +28,14 @@ raise_step -> Step<'input>
 where_step -> Step<'input>
     = where_keyword condition:expression { Step::Where(condition) }
 
-expression -> Expression
-    = level_literal_expression
+expression -> Expression<'input>
+    = variable_expression
+    / level_literal_expression
 
-level_literal_expression -> Expression
+variable_expression -> Expression<'input>
+    = name:identifier { Expression::Variable(name) }
+
+level_literal_expression -> Expression<'input>
     = value:level { Expression::Literal(Value::Level(value)) }
 
 level -> Level
