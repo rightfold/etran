@@ -19,6 +19,7 @@ pub struct From<'str> {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Step {
+    Perform(Expression),
     Raise(Level, Expression),
     Where(Expression),
 }

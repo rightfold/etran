@@ -14,8 +14,12 @@ from -> From<'input>
 
 #[pub]
 step -> Step
-    = raise_step
+    = perform_step
+    / raise_step
     / where_step
+
+perform_step -> Step
+    = perform_keyword expression:expression { Step::Perform(expression) }
 
 raise_step -> Step
     = raise_keyword level:level message:expression { Step::Raise(level, message) }
@@ -54,6 +58,7 @@ keyword -> ()
     / info_keyword
     / notice_keyword
     / of_keyword
+    / perform_keyword
     / raise_keyword
     / real_keyword
     / type_keyword
@@ -75,6 +80,7 @@ from_keyword     -> () = s [Ff][Rr][Oo][Mm] s
 info_keyword     -> () = s [Ii][Nn][Ff][Oo] s
 notice_keyword   -> () = s [Nn][Oo][Tt][Ii][Cc][Ee] s
 of_keyword       -> () = s [Oo][Ff] s
+perform_keyword  -> () = s [Pp][Ee][Rr][Ff][Oo][Rr][Mm] s
 raise_keyword    -> () = s [Rr][Aa][Ii][Ss][Ee] s
 real_keyword     -> () = s [Rr][Ee][Aa][Ll] s
 type_keyword     -> () = s [Tt][Yy][Pp][Ee] s

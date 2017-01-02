@@ -4,6 +4,8 @@ pub enum Instruction {
     Halt,
     ConditionalJump(usize),
 
+    Pop,
+
     Raise(Level),
 
     Literal(Value),

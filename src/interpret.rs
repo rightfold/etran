@@ -16,6 +16,11 @@ pub fn interpret<Raise>(instructions: &[Instruction], mut raise: Raise)
                 }
             },
 
+            Instruction::Pop => {
+                operand_stack.pop();
+                program_counter += 1;
+            },
+
             Instruction::Raise(level) => {
                 let message = operand_stack.pop().unwrap();
                 raise(level, &message);

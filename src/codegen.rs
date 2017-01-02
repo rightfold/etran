@@ -3,6 +3,10 @@ use bytecode::Instruction;
 
 pub fn codegen_step(instructions: &mut Vec<Instruction>, step: &Step) {
     match *step {
+        Step::Perform(ref expression) => {
+            codegen_expression(instructions, expression);
+            instructions.push(Instruction::Pop);
+        },
         Step::Raise(level, ref message) => {
             codegen_expression(instructions, message.clone());
             instructions.push(Instruction::Raise(level));
