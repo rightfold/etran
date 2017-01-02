@@ -2,7 +2,13 @@ use value::{Level, Value};
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Definition<'str> {
+    Channel(&'str str, Type, &'str str),
     Filter(&'str str, From<'str>, Vec<Step>),
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum Type {
+    Real,
 }
 
 #[derive(Debug, Eq, PartialEq)]

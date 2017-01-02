@@ -2,9 +2,17 @@ include!(concat!(env!("OUT_DIR"), "/grammar.rs"));
 
 #[cfg(test)]
 mod tests {
-    use ast::{Definition, Expression, From, Step};
+    use ast::{Definition, Expression, From, Step, Type};
     use super::*;
     use value::{Level, Value};
+
+    #[test]
+    fn test_channel_definition() {
+        assert_eq!(
+            definition("CHANNEL f OF DATA TYPE real USING round_robin;"),
+            Ok(Definition::Channel("f", Type::Real, "round_robin"))
+        );
+    }
 
     #[test]
     fn test_filter_definition() {
