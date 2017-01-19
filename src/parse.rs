@@ -9,8 +9,8 @@ mod tests {
     #[test]
     fn test_channel_definition() {
         assert_eq!(
-            definition("CHANNEL f OF DATA TYPE real USING round_robin;"),
-            Ok(Definition::Channel("f", Type::Real, "round_robin"))
+            definition("CHANNEL f OF DATA TYPE boolean USING round_robin;"),
+            Ok(Definition::Channel("f", Type::Boolean, "round_robin"))
         );
     }
 

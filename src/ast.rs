@@ -8,7 +8,7 @@ pub enum Definition<'str> {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Type {
-    Real,
+    Boolean,
 }
 
 #[derive(Debug, Eq, PartialEq)]

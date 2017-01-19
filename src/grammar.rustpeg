@@ -7,7 +7,7 @@ definition -> Definition<'input>
     / filter_keyword name:identifier as_keyword from:from steps:step* semicolon { Definition::Filter(name, from, steps) }
 
 type_ -> Type
-    = real_keyword { Type::Real }
+    = boolean_keyword { Type::Boolean }
 
 from -> From<'input>
     = from_keyword stream:identifier as_keyword name:identifier { From{stream: stream, name: name} }
@@ -53,6 +53,7 @@ identifier -> &'input str
 keyword -> ()
     = alert_keyword
     / as_keyword
+    / boolean_keyword
     / channel_keyword
     / critical_keyword
     / data_keyword
@@ -65,7 +66,6 @@ keyword -> ()
     / of_keyword
     / perform_keyword
     / raise_keyword
-    / real_keyword
     / type_keyword
     / using_keyword
     / warning_keyword
@@ -75,6 +75,7 @@ semicolon -> () = s ";" s
 
 alert_keyword    -> () = s [Aa][Ll][Ee][Rr][Tt] s
 as_keyword       -> () = s [Aa][Ss] s
+boolean_keyword  -> () = s [Bb][Oo][Oo][Ll][Ee][Aa][Nn] s
 channel_keyword  -> () = s [Cc][Hh][Aa][Nn][Nn][Ee][Ll] s
 critical_keyword -> () = s [Cc][Rr][Ii][Tt][Ii][Cc][Aa][Ll] s
 data_keyword     -> () = s [Dd][Aa][Tt][Aa] s
@@ -87,7 +88,6 @@ notice_keyword   -> () = s [Nn][Oo][Tt][Ii][Cc][Ee] s
 of_keyword       -> () = s [Oo][Ff] s
 perform_keyword  -> () = s [Pp][Ee][Rr][Ff][Oo][Rr][Mm] s
 raise_keyword    -> () = s [Rr][Aa][Ii][Ss][Ee] s
-real_keyword     -> () = s [Rr][Ee][Aa][Ll] s
 type_keyword     -> () = s [Tt][Yy][Pp][Ee] s
 using_keyword    -> () = s [Uu][Ss][Ii][Nn][Gg] s
 warning_keyword  -> () = s [Ww][Aa][Rr][Nn][Ii][Nn][Gg] s

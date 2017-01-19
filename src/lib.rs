@@ -4,3 +4,4 @@ pub mod codegen;
 pub mod interpret;
 pub mod parse;
 pub mod value;
+pub mod wire;
